@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzg.dao.UserMapper">
+    <select id="findAllUserByPage" resultType="com.xzg.domain.User" parameterType="com.xzg.domain.UserVO">
+        SELECT
+            id,
+            NAME,
+            portrait,
+            phone,
+            PASSWORD,
+            STATUS,
+            create_time
+        FROM USER
+        <where>
+            <if test="true">
+                and is_del != 1
+            </if>
+            <if test="username != null">
+                and name = #{username}
+            </if>
+            <if test="startCreateTime != null and endCreateTime != null">
+                and create_time BETWEEN #{startCreateTime} AND #{endCreateTime}
+            </if>
+        </where>
+    </select>
+
+    <!--修改用户状态-->
+    <update id="updateUserStatus">
+        update user set status=#{status} where id=#{id}
+    </update>
+    <!--用户登录-->
+    <select id="login" parameterType="com.xzg.domain.User" resultType="com.xzg.domain.User">
+        select * from user
+    </select>
+    <!--查询用户关联的角色信息public List<Role> findUserRoleById(Integer uid);-->
+    <select id="findUserRoleById" resultType="com.xzg.domain.Role" parameterType="int">
+        SELECT * FROM roles r INNER JOIN `user_role_relation`  ur ON r.id = ur.role_id WHERE ur.user_id = #{uid}
+    </select>
+    <!--删除user的关联角色-->
+    <delete id="deleteUserRoles" parameterType="int">
+        delete from `user_role_relation`where user_id = #{userId}
+    </delete>
+    <!--添加角色信息-->
+    <insert id="saveUserRoles" parameterType="com.xzg.domain.User_Role_relation">
+    insert into user_role_relation values(null,#{userId},#{roleId},#{createdTime},#{updatedTime},#{createdBy},#{updatedby})
+    </insert>
+</mapper>

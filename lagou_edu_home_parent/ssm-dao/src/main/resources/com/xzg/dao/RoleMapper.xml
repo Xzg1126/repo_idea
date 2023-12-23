@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzg.dao.RoleMapper">
+
+    <!--查询所有角色-->
+    <select id="findAllRole" resultType="com.xzg.domain.Role">
+        SELECT * FROM roles
+    <where>
+        <if test="name !=null and name!=''">
+            name=#{name}
+        </if>
+    </where>
+    </select>
+
+    <!--添加用户-->
+    <insert id="saveRole" parameterType="com.xzg.domain.Role">
+        INSERT INTO roles (
+            code,
+            NAME,
+            description,
+            created_time,
+            updated_time,
+            created_by,
+            updated_by
+        )
+        VALUES
+            (
+                #{code},#{name},#{description},#{createdTime},#{updatedTime},#{createdBy},#{updatedBy}
+            )
+    </insert>
+    <!--更新角色-->
+    <update id="updateRole" parameterType="com.xzg.domain.Role">
+        update roles set
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="code != null and code!= ''">
+                code = #{code}
+            </if>
+            <if test="name != null and name!= ''">
+                name = #{name}
+            </if>
+            <if test="description != null and description!= ''">
+                description = #{description}
+            </if>
+            <if test="createdTime != null ">
+                created_time = #{createdTime}
+            </if>
+            <if test="updatedTime != null ">
+                updated_time = #{updatedTime}
+            </if>
+            <if test="createdBy != null and createdBy!= ''">
+                created_by = #{createdBy}
+            </if>
+            <if test="updatedBy != null and updatedBy!= ''">
+                updated_by = #{updatedBy}
+            </if>
+            <where>
+                <if test="id!=null and id!=''">
+                    id=#{id}
+                </if>
+            </where>
+        </trim>
+    </update>
+    <!--先删除role_menu_relation里角色对应的menu-->
+    <delete id="deleteRoleContextMenu" parameterType="int">
+        delete from role_menu_relation where role_id=#{roleId}
+    </delete>
+    <!--为role添加menu-->
+    <insert id="saveRoleContextMenu" parameterType="com.xzg.domain.Role_menu_relation">
+        insert into role_menu_relation values
+        (null,#{menuId},#{roleId},#{createdTime},#{updatedTime},#{createdBy},#{updatedby})
+    </insert>
+
+    <!--删除role-->
+    <delete id="deleteRole" parameterType="int">
+        delete from roles where  id = #{rid}
+    </delete>
+
+</mapper>

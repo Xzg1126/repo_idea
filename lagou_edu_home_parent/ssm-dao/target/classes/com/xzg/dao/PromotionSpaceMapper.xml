@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xzg.dao.PromotionSpaceMapper">
+
+    <!--查询广告位-->
+    <select id="findAllPromotionSpace" resultType="com.xzg.domain.PromotionSpace">
+        SELECT	* FROM promotion_space
+    </select>
+
+    <!--添加广告-->
+    <insert id="savePromotionSpace" parameterType="com.xzg.domain.PromotionSpace">
+        INSERT INTO promotion_space
+            (id,NAME,spaceKey,createTime,updateTime,isDel)
+        VALUES
+        (#{id},#{name},#{spaceKey},#{createTime},#{updateTime},#{isDel})
+    </insert>
+
+    <!--修改广告位-->
+    <update id="updatePromotionSpace" parameterType="com.xzg.domain.PromotionSpace">
+        UPDATE promotion_space SET name = #{name} , updateTime =#{updateTime} WHERE id = #{id}
+    </update>
+
+    <!--回显广告位名称-->
+    <select id="findPromotionSpaceById" parameterType="int" resultType="com.xzg.domain.PromotionSpace">
+        SELECT id,NAME FROM promotion_space WHERE id = #{id}
+    </select>
+</mapper>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzg.dao.ResourceMapper">
+    <select id="findAllResource" resultType="com.xzg.domain.Resource" parameterType="com.xzg.domain.ResourceVO">
+        select * from  resource
+        <where>
+            <if test="name != null ">
+
+                and name like concat('%',#{name},'%')
+            </if>updated_by
+            <if test="categoryId != null ">
+                and category_id=#{categoryId}
+            </if>
+            <if test="url != null ">
+                and url=url
+            </if>
+        </where>
+    </select>
+    <!--添加资源信息-->
+    <insert id="saveResource" parameterType="com.xzg.domain.Resource">
+        insert into resource(name,url,category_id,description,created_time,updated_time,created_by,updated_by)
+        values (#{name},#{url},#{categoryId},#{description},#{createdTime},#{updatedTime},#{createdBy},#{updatedBy})
+    </insert>
+    <!--更新资源-->
+    <update id="updateResource" parameterType="com.xzg.domain.Resource" >
+        update resource
+        <trim prefix="set" prefixOverrides=",">
+            <if test="name!=null and name!=''">
+                name=#{name},
+            </if>
+            <if test="url!=null">
+                url=#{url},
+            </if>
+            <if test="categoryId!=null ">
+                category_id=#{categoryId},
+            </if>
+            <if test="description !=null and description !=''">
+                description=#{description},
+            </if>
+            <if test="updatedTime !=null ">
+                updated_time=#{updatedTime}
+            </if>
+        </trim>
+          <where>
+              <if test="id != null and id != '' ">
+                     id = #{id}
+              </if>
+          </where>
+    </update>
+    <!--删除资源-->
+    <update id="deleteResource" parameterType="int">
+        delete from resource where id=#{id}
+    </update>
+</mapper>
