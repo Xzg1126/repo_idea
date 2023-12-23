@@ -9,4 +9,5 @@ public interface testMapper {
 
 
     public List<test> findAlltest();
+      public List<test> findAlltest1();
 }
