@@ -16,4 +16,6 @@ public interface testMapper {
       public void test31();
       public void test41();
       public void test51();
+      public void test6();
+
 }
